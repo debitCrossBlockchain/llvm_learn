@@ -1,7 +1,9 @@
 # 学习LLVM
 
 #### Description
-学习LLVM，整理资料，记录学习流程，欢迎讨论交流
+学习LLVM，整理资料，记录学习流程，欢迎讨论交流。
+
+本仓库的很多方法、摘录来自官网、互联网共享资料。遵从CC协议。
 
 #### Software Architecture
 Software architecture description
