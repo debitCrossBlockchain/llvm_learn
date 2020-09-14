@@ -113,6 +113,29 @@ clean::
 
 TODO 如果改这个Makefile以复用
 
+### 生成文档
+
+LLVM的文档格式采用reStructuredText(ReST)格式写的，文件后缀名是`.rst`。HTML文档采用[Sphinx](http://sphinx-doc.org/) 文件构建系统生成。
+
+可以参考`SphinxQuickstartTemplate.rst`学习如何写该类型文档。可以在VS Code中安装插件reStructuredText。详细可参考[Sphinx Introduction for LLVM Developers](https://lld.llvm.org/sphinx_intro.html)。
+
+要生成文档，需要安装sphinx-build。
+
+```bash
+root@5be544e81dcc:/# apt install sphinx3
+```
+
+先安装pip（不要安装esay_install，以废弃），再通过其安装sphinx-build。
+
+```bash
+root@5be544e81dcc:/# wget https://bootstrap.pypa.io/get-pip.py
+root@5be544e81dcc:/# export http_proxy=http://192.168.3.8:11080
+```
+
+其中我设置了宿主机代理http://192.168.3.8:11080。
+
+在镜像中，进入`/workspace/llvm/docs`路径，执行
+
 
 
 [^1]: books/Getting_Started_with_LLVM_Core_Libraries.pdf	"Getting Started with LLVM Core Library"
