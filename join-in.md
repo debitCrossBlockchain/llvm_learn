@@ -1,3 +1,8 @@
 # 参与到LLVM开源项目开中去
 
 LLVM有梳理其开源项目的[TODO List](https://www.llvm.org/OpenProjects.html) 这其中也有用于谷歌编程之夏。
+
+# 社区
+
+- Clang前端[开发人员列表](https://lists.llvm.org/mailman/listinfo/cfe-dev)
+- LLVM开发各模块总的[列表](https://lists.llvm.org/mailman/listinfo/llvmdev)
