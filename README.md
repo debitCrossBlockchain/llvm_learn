@@ -3,6 +3,9 @@
 #### 介绍
 学习LLVM，整理资料，记录学习流程，欢迎讨论交流
 
+本文记录使用Typora Markdown编辑器。一些绘图语法参见：https://support.typora.io/Draw-Diagrams-With-Markdown/。
+
+
 #### 软件架构
 软件架构说明
 

@@ -51,7 +51,11 @@ root@5be544e81dcc:/# service ssh start
 
 ![在VS Code中ssh remote插件能够轻松编辑远程文件](F:\Workspace\Git\llvm-study\images\vs_code_ssh_remote_edit_file_easyly.png)
 
-VS Code可以在远程安装一些插件：C/C++等。
+禁用VS Code更新，VS Code自动更新导致远程的VS Code Server版本也要更新，时间不能浪费在无意义的地方。
+
+![禁用VS Code更新](F:\Workspace\Git\llvm-study\images\vs_code_setting_update_none.png)
+
+VS Code可以在远程安装一些插件：C/C++等提高效率。
 
 关闭容器
 
@@ -96,6 +100,7 @@ SYSTEMLIBS=$(shell $(LLVM_CONFIG) --system-libs)
 
 HELLO=helloworld
 HELLO_OBJECTS=hello.o
+EXAM_OBJECTS=exam.o
 
 default: $(HELLO)
 
@@ -107,10 +112,14 @@ $(HELLO) : $(HELLO_OBJECTS)
 	@echo Linking $@
 	$(QUIET)$(CXX) -o $@ $(CXXFLAGS) $(LDFLAGS) $^ $(LLVMLIBS) $(SYSTEMLIBS)
 
-clean::
-	$(QUIET)rm -f $(HELLO) $(HELLO_OBJECTS)
-```
+exam : $(EXAM_OBJECTS)
+	@echo homework $@
+	$(QUIET)$(CXX) -o $@ $(CXXFLAGS) $(LDFLAGS) $^ $(LLVMLIBS) $(SYSTEMLIBS)
 
+clean::
+	$(QUIET)rm -f $(HELLO) $(HELLO_OBJECTS) $(EXAM_OBJECTS)
+
+```
 TODO 如果改这个Makefile以复用
 
 ### 生成文档
@@ -127,7 +136,7 @@ root@5be544e81dcc:/# apt install sphinx3
 
 先安装pip（不要安装esay_install，以废弃），再通过其安装sphinx-build。
 
-```bash
+​```bash
 root@5be544e81dcc:/# wget https://bootstrap.pypa.io/get-pip.py
 root@5be544e81dcc:/# export http_proxy=http://192.168.3.8:11080
 ```
@@ -155,3 +164,11 @@ sudo apt install llvm clang
 LLVM 8
 
 尝试通过编译安装LLVM 8的环境
+
+```
+
+```
+
+```
+
+```
