@@ -115,7 +115,7 @@ TODO 如果改这个Makefile以复用
 
 ### 生成文档
 
-LLVM的文档格式采用reStructuredText(ReST)格式写的，文件后缀名是`.rst`。HTML文档采用[Sphinx](http://sphinx-doc.org/) 文件构建系统生成。
+LLVM的文档格式采用reStructuredText(ReST)格式写的，文件后缀名是`.rst`。HTML文档采用[Sphinx](http://sphinx-doc.org/) 文件构建系统生成。生成文档也要做些工作，可以直接阅读版本已经发布的[文档](join-in.md)。
 
 可以参考`SphinxQuickstartTemplate.rst`学习如何写该类型文档。可以在VS Code中安装插件reStructuredText。详细可参考[Sphinx Introduction for LLVM Developers](https://lld.llvm.org/sphinx_intro.html)。
 
@@ -143,6 +143,12 @@ root@5be544e81dcc:/# export http_proxy=http://192.168.3.8:11080
 ## LLVM 3.8
 
 尝试通过编译安装LLVM3.8的环境
+
+从源安装，Ubuntu 16.04 目前是 3.8的版本
+
+```bash
+sudo apt install llvm clang
+```
 
 
 
