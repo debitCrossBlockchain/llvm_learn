@@ -122,6 +122,25 @@ clean::
 ```
 TODO 如果改这个Makefile以复用
 
+### 通过编译安装
+
+单独编译安装LLVM很简单，一次成功。
+
+#### 通过CMake
+
+编译参数更多地请参考llvm/docs/CMake.rst文档。
+
+```bash
+mkdir mybuilddir
+cd mybuilddir
+cmake path/to/llvm/source/root
+make
+```
+
+通过如上步骤，即可编译安装LLVM。
+
+编译安装LLVM+Clang
+
 ### 生成文档
 
 LLVM的文档格式采用reStructuredText(ReST)格式写的，文件后缀名是`.rst`。HTML文档采用[Sphinx](http://sphinx-doc.org/) 文件构建系统生成。生成文档也要做些工作，可以直接阅读版本已经发布的[文档](join-in.md)。
@@ -136,10 +155,11 @@ root@5be544e81dcc:/# apt install sphinx3
 
 先安装pip（不要安装esay_install，以废弃），再通过其安装sphinx-build。
 
-​```bash
+```bash
 root@5be544e81dcc:/# wget https://bootstrap.pypa.io/get-pip.py
 root@5be544e81dcc:/# export http_proxy=http://192.168.3.8:11080
 ```
+
 
 其中我设置了宿主机代理http://192.168.3.8:11080。
 
@@ -164,6 +184,8 @@ sudo apt install llvm clang
 LLVM 8
 
 尝试通过编译安装LLVM 8的环境
+
+```
 
 ```
 
