@@ -66,7 +66,7 @@
     3. BasciBlock，一系列指令。
     4. Instruction，一条指令，最小单元了。
     5. Value。use-def链。从Value继承的类意味着该类定义了可以被其他指令使用的结果。记忆方法，“**使用**（Use）一个或多个**值**（Value）”。
-    6. User。访问def-use链。User的子类意味着该类使用一个或多个Value接口。
+    6. User。访问定值-引用链（*Definition-Use Chains*）。User的子类意味着该类使用一个或多个Value接口。
 
     ```mermaid
     classDiagram
