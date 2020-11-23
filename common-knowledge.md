@@ -180,12 +180,15 @@ A[LLVM IR] --> B[流程]
 
     - SelectionDAG类，使用DAG来表示每个基本块的计算，每个SDNode节点对应一个指令或操作数。
     - 头文件llvm/include/llvm/CodeGen/ISDOpcodes.h包含**目标无关节点**的定义，lib/Target/<Target>/<Target>ISelLowering.h定义**目标相关的节点**。lib/Target/<Target>/<Target>ISelLowering.cpp 实现特定于目标的合并优化。
-    - <Target>TargetLowering。一个SelectionDAGBuilder实例（详见SelectionDAGISel.cpp）访问每个函数，并为每个基本块创建一个SelectionDAG对象。每个编译目标都需要实现目标降级TargetLowering类中的算法，子类为<Target>TargetLowering。
+    - <Target>TargetLowering。一个SelectionDAGBuilder实例（详见SelectionDAGISel.cpp）访问每个函数，并为每个基本块创建一个SelectionDAG对象。每个编译目标都需要实现目标降级TargetLowering类中的算法，子类为<Target>TargetLowering。lowering就当它是对指令进行处理的含义。
     - <Target>DAGToDAGISel.cpp。每个编译目标都通过在名为<Target>DAGToDAGISel.cpp的SelectionDAGISel子类中实现Select方法来进行指令选择。Select()方法调用SelectCod()，最终调用SelectCodCommo()，后者是一个与目标相关的函数，以便通过使用之前生成的匹配表来匹配节点。
+    - <Target>DAGScheduler.cpp
     - <Target>TargetMachine.cpp。关于特定目标的属性（如数据分布和ABI）的信息。
     - <Target>AsmPrinter.cpp。汇编代码输出。
 
-32. 指令选择是将LLVM IR转换为代表目标指令的SelectionDAGger节点（SDNode）的过程。……
+32. 指令选择是将LLVM IR转换为代表目标指令的SelectionDAG节点（SDNode）的过程。
+
+    第一步是从LLVM IR指令构建DAG，从而创建一个其节点执行IR操作的SelectionDAG对象。然后，对这些节点执行降级、DAG组合器和合法化阶段，使其能更容易与目标指令相匹配。之后，指令选择算法使用节点模式匹配进行DAG到DAG的转换，并将SelectionDAG节点转换为代表目标指令的节点。（PS: 这部分调试的入口，可以从`SelectionDAGISel::CodeGenAndEmitDAG`进入阅读源码。）
 
     关于指令选择，LLVM还支持一种成为快速指令选择的算法（对应于FastIsel类）。
 

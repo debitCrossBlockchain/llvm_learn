@@ -181,16 +181,81 @@ sudo apt install llvm clang
 
 
 
-LLVM 8
+## LLVM 8
 
-尝试通过编译安装LLVM 8的环境
+成功编译安装LLVM 8的环境，在Unix-like Systems上。
 
+以我的编译环境为例，虚拟机RAM 2G，还需要足够大的交换Swap空间。否则几次编译都有这样的错误：
+
+```bash
+clang: error: unable to execute command: Killed
+clang: error: assembler command failed due to signal (use -v to see invocation)
 ```
 
-```
+1. 添加Swap空间，参考[博客](https://blog.csdn.net/hktkfly6/article/details/52753320)
 
+```bash
+sudo fallocate -l 6G /swapfile
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
 ```
+   开机自动挂载swap：
+   使用 vi 或 nano 在 /etc/fstab 文件底部添加如下内容：
 
-```
+   ```
+/swapfile none swap sw 0 0
+   ```
+2. 其次以编译经验，编译llvm和clang相关工具，带Debug信息，至少磁盘空间还剩余四五十G。VMWare Ubuntu LVM扩容，可以参考这篇[博客](https://blog.csdn.net/u011730792/article/details/109965822)。
 
-```
+3. 下载源代码，这里通过[Gitee 极速下载](https://gitee.com/mirrors) **/** [LLVM](https://gitee.com/mirrors/LLVM)
+
+   ```bash
+   git clone https://gitee.com/mirrors/LLVM.git
+   ```
+
+   会比原始仓库https://github.com/llvm/llvm-project快很多。
+
+4. 切换分支
+
+   ```bash
+   git checkout llvmorg-8.0.1 -b llvmorg-8.0.1
+   ```
+
+5. 设置一些软链接
+
+   ```bash
+   cd llvm/tools
+   ln -s ../../clang clang
+   cd clang/tools/
+   ln -s ../../clang-tools-extra extra
+   cd ../../../
+   ```
+
+6. 开始构建，可参考[Building LLVM with CMake](https://llvm.org/docs/CMake.html)、[Getting Started](https://clang.llvm.org/get_started.html)和[Hacking on Clang](https://clang.llvm.org/hacking.html#docs)
+
+   ```bash
+   mkdir build
+   cd build/
+   cmake -DLLVM_ENABLE_PROJECTS=clang -DCMAKE_BUILD_TYPE=RelWithDebInfo ..
+   make clang
+   ```
+
+7. 测试一下
+
+   ```bash
+   unset LLVM_HOME
+   export PATH=~/project/LLVM/llvm/build/bin:$PATH
+   ```
+
+   输出：
+
+   ```bash
+   $ clang --version
+   clang version 8.0.1
+   Target: x86_64-unknown-linux-gnu
+   Thread model: posix
+   InstalledDir: /root/project/LLVM/llvm/build/bin
+   ```
+
+   
