@@ -237,9 +237,19 @@ sudo swapon /swapfile
    ```bash
    mkdir build
    cd build/
-   cmake -DLLVM_ENABLE_PROJECTS=clang -DCMAKE_BUILD_TYPE=RelWithDebInfo ..
-   make clang
+   cmake -DCMAKE_BUILD_TYPE=Debug -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra" ..
+   make -j2
    ```
+
+   `-DCMAKE_EXPORT_COMPILE_COMMANDS=ON`用于生成编译数据库。`DCMAKE_BUILD_TYPE=RelWithDebInfo`很占磁盘空间，没有一两百G不要全编。
+
+> - `-DLLVM_ENABLE_PROJECTS='...'` — semicolon-separated list of the LLVM subprojects you’d like to additionally build. Can include any of: clang, clang-tools-extra, libcxx, libcxxabi, libunwind, lldb, compiler-rt, lld, polly, or debuginfo-tests.
+>   For example, to build LLVM, Clang, libcxx, and libcxxabi, use `-DLLVM_ENABLE_PROJECTS="clang;libcxx;libcxxabi"`.
+>
+> - `-DCMAKE_INSTALL_PREFIX=directory` — Specify for *directory* the full pathname of where you want the LLVM tools and libraries to be installed (default `/usr/local`).
+> - `-DCMAKE_BUILD_TYPE=type` — Valid options for *type* are Debug, Release, RelWithDebInfo, and MinSizeRel. Default is Debug.
+>
+> -- [Refer](https://llvm.org/docs/GettingStarted.html)
 
 7. 测试一下
 
@@ -257,5 +267,13 @@ sudo swapon /swapfile
    Thread model: posix
    InstalledDir: /root/project/LLVM/llvm/build/bin
    ```
+
+   ## 编译常见错误
+
+   1. `error: linker command failed with exit code 1 (use -v to see invocation)`
+
+      编译`make clang-check -j2`时遇到的。
+
+   2. 
 
    
