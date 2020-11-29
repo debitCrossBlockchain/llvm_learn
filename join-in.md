@@ -8,6 +8,22 @@ LLVM有梳理其开源项目的[TODO List](https://www.llvm.org/OpenProjects.htm
 
 而其他版本，以3.5.0为例，路径在：https://releases.llvm.org/3.5.0/docs/WritingAnLLVMPass.html 。
 
+注意到替换url的小规律：
+
+```
+clang相关：
+1. 从最新到指定版本的clang doc
+http://clang.llvm.org/docs/LibASTMatchers.html
+-->
+https://releases.llvm.org/8.0.1/tools/clang/docs/LibASTMatchers.html
+2. 从最新到指定版本的clang extra doc
+http://clang.llvm.org/extra/clang-tidy/
+-->
+https://releases.llvm.org/8.0.1/tools/clang/tools/extra/docs/clang-tidy/
+```
+
+
+
 ## Doxygen生成的API文档
 
 https://clang.llvm.org/doxygen/
