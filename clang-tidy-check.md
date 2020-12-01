@@ -115,7 +115,7 @@ clang-tidy是强大的静态分析工具。其中，已经实现了很多检查�
      }
      ```
 
-     
+     AST输出
 
      ```bash
      $ bin/clang-check -ast-dump -ast-dump-filter="catch" ../../clang-tools-extra/test/clang-tidy/misc-catch-by-const-ref.cpp --
@@ -150,12 +150,67 @@ clang-tidy是强大的静态分析工具。其中，已经实现了很多检查�
      clang-query ../../clang-tools-extra/test/clang-tidy/misc-catch-by-const-ref.cpp --
      ```
 
-     
+     对照上面第6行，我们要匹配`logic_error &e`，它的特点是：
+
+     - 变量声明
+     - 在catch语句中
+     - 是一个引用
+     - 但没有被const修饰
+
+     ```
+         } catch (logic_error &e) {
+     ```
+
+     对照上面第11行，我们想匹配的是`VarDecl`
+
+     ```bash
+     |-VarDecl 0x9e89fe8 <line:15:12, col:25> col:25 e 'logic_error &'
+     ```
+
+     [AST Matcher Reference](https://releases.llvm.org/8.0.1/tools/clang/docs/LibASTMatchersReference.html)按Matcher匹配的类别和节点类型分组，将分为了三类：
+
+     - [Node Matchers](https://releases.llvm.org/8.0.1/tools/clang/docs/LibASTMatchersReference.html#decl-matchers)（节点匹配器）：与特定类型的AST节点匹配的匹配器。
+     - [Narrowing Matchers](https://releases.llvm.org/8.0.1/tools/clang/docs/LibASTMatchersReference.html#narrowing-matchers)（缩小匹配器）：匹配AST节点上的属性的匹配器。
+     - [Traversal Matchers](https://releases.llvm.org/8.0.1/tools/clang/docs/LibASTMatchersReference.html#traversal-matchers) （遍历匹配器）：允许在AST节点之间遍历的匹配器。
+
+     在[AST Matcher Reference](https://releases.llvm.org/8.0.1/tools/clang/docs/LibASTMatchersReference.html)搜索`VarDecl`
+
+     ![image-20201201073149045](images/Matcher_varDecl.png)
+
+     按照上述4点特征，拼凑匹配器：
+
+     - 变量声明与**varDecl**匹配（对于类型VarDecl，请注意大小写差异）
+     - catch语句内的匹配项是**isExceptionVariable**
+     - 引用类型的匹配项是**references**
+     - const方面由**isConstQualified**匹配
+
+     ```c++
+     varDecl(isExceptionVariable(),hasType(references(qualType(unless(isConstQualified()))))
+            )
+     ```
+
+     `varDecl` 是与`VarDecl`匹配的[`VariadicDynCastAllOfMatcher`](https://releases.llvm.org/8.0.1/tools/clang/docs/LibASTMatchers.html#writing-your-own-matchers)的实例。它可以采用多个参数。因此，第一个参数设为`isExceptionVariable`，第二个描述我们正在寻找的`hasType(references(qualType(unless(isConstQualified()))))`的访问类型。从字面意思，从内向外展开此匹配表达式，我们正在的是寻找的是：不包括（`unless`）const限定（`isConstQualified`）的限定符类型（`qualType`）的参考（`references`）。
+
+     ![image-20201201083236766](images/Matcher_isExceptionVariable.png)
+
+     ![image-20201201083332887](images/Matcher_unless.png)
+
+     ![image-20201201083419697](images/Matcher_isConstQualified.png)
+
+     ![image-20201201083531000](images/Matcher_qualType.png)
+
+     ![image-20201201083632123](images/Matcher_references.png)
+
+     有多个匹配器定义宏，它们处理多态返回值和不同的参数计数。参见[ASTMatchersMacros.h](https://clang.llvm.org/doxygen/ASTMatchersMacros_8h.html)。
 
    - 在匹配表达式中绑定节点
 
      与特定AST节点匹配的匹配器，所谓的节点匹配器（node matchers），是**可绑定的**。例如，`recordDecl(hasName("MyClass")).bind("id")`。`bind("id")`会将匹配的`recordDecl`节点绑定到字符串`"id"`，以便稍后在match回调中检索。
 
+     ```c++
+     .bind("catch")
+     ```
+     
      
 
 4. 重要的第二步，实现`check`，并添加修复（按需）
