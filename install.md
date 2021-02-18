@@ -274,6 +274,16 @@ sudo swapon /swapfile
 
       编译`make clang-check -j2`时遇到的。
 
-   2. 
+   2. 编译clang项目
 
+      ```
+      cmake -DCMAKE_BUILD_TYPE=Debug -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;libcxx;" -DLLVM_TARGETS_TO_BUILD="X86" -DBUILD_SHARED_LIBS=ON -DCMAKE_CXX_COMPILER=/usr/bin/g++ ..
+      ```
    
+      成功后，执行clang编译程序`stddef.h not found`以及要安装z3的库。
+      
+      注意配置文件/etc/ld.so.conf中有指定动态库搜索路径，添加库后还需要`ldconfig`重新配置动态加载库。
+   
+   ## 使用CMake构建LLVM项目
+   
+   参考[Embedding LLVM in your project](https://releases.llvm.org/8.0.1/docs/CMake.html#id14) 在源码外构建LLVM项目，链接使用上述编译的LLVM .a库。
