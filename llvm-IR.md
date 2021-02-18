@@ -7,3 +7,5 @@
 [1]: [LLVM IR CSDN分类专栏](https://blog.csdn.net/qq_42570601/category_10200372.html)
 
 [2]: https://zhuanlan.zhihu.com/p/26127100
+
+[3]: [llvm-IR基础知识](https://blog.csdn.net/qq_32460819/article/details/111752441)
